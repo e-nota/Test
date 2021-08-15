@@ -9,7 +9,8 @@ namespace CountingReceiptTapes
         {
             List<Receipt> receipts = new List<Receipt>();
           //  Random rndReceipts = new Random();
-            int countReceipts = 4;
+            int countReceipts = 5;
+            ManualRound round = new ManualRound();
             for (int i = 0; i < countReceipts; i++)
             {
                 Random gen = new Random();
@@ -30,33 +31,34 @@ namespace CountingReceiptTapes
                     RandomExtensions rndExt = new RandomExtensions();
                     receiptString.Price = rndExt.GetRandomDouble(5, 10000); 
                     receiptString.Quantity = rnd.Next(1, 20);
-                    ManualRound round = new ManualRound();
                     receiptString.Sum = round.SampleRound((receiptString.Quantity * receiptString.Price), 0); 
                     receiptStrings.Add(receiptString);
 
                     sumReceipt += receiptString.Quantity * receiptString.Price; //Сумма чека
                 }
-                //--- Проверка полученного --- //
+                //---------------------
                 Console.WriteLine("№  Price  Qnt  Sum");
                 foreach (var recs in receiptStrings)
                 {
                     Console.WriteLine($"{recs.Num} {recs.Price}   {recs.Quantity}  {recs.Sum} \n");
                 }
                 //----------------------
-                ManualRound round1 = new ManualRound();
-                receipt.Sum = round1.SampleRound(sumReceipt, 1); // округление до 5 коп
+                receipt.Sum = round.SampleRound(sumReceipt, 1); // округление до 5 коп
                 receipt.receiptString = receiptStrings;
                 receipts.Add(receipt);
             }
-            //--- Проверка полученного --- //
+            //----------------------
+            double itogo = 0;
             Console.WriteLine("№ Date       Sum");
             foreach (var rec in receipts)
             {
                 Console.WriteLine($"{rec.Num} {rec.Dat.ToString("d")}  {rec.Sum} \n");
+                
+                itogo += round.SampleRound(rec.Sum, 0);
             }
+            Console.WriteLine($"Itogo: {itogo} \n");
             //----------------------
-
-
+            
 
         }
     }
