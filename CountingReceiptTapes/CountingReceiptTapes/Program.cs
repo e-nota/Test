@@ -7,9 +7,9 @@ namespace CountingReceiptTapes
     {
         static void Main(string[] args)
         {
-            List<Receipt> receipts = new List<Receipt>();
+            List<Receipt> receipts = new List<Receipt>(); //Receipt Tape
           //  Random rndReceipts = new Random();
-            int countReceipts = 5;
+            int countReceipts = 10;
             ManualRound round = new ManualRound();
             for (int i = 0; i < countReceipts; i++)
             {
@@ -56,9 +56,23 @@ namespace CountingReceiptTapes
                 
                 itogo += round.SampleRound(rec.Sum, 0);
             }
+            itogo = round.SampleRound(itogo, 0);
             Console.WriteLine($"Itogo: {itogo} \n");
             //----------------------
-            
+
+            FileActions fileActions = new FileActions();
+            fileActions.ReceiptsWriteFile(receipts);
+            List<Receipt> readReceipts = fileActions.ReceiptsReadFile("Receipts.txt");
+
+            itogo = 0;
+            foreach (var rec in readReceipts)
+            {
+                Console.WriteLine($"{rec.Num} {rec.Dat.ToString("d")}  {rec.Sum} \n");
+
+                itogo += round.SampleRound(rec.Sum, 0);
+            }
+            itogo = round.SampleRound(itogo, 0);
+            Console.WriteLine($"Itogo: {itogo} \n");
 
         }
     }
