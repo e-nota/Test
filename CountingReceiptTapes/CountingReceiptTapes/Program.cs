@@ -9,7 +9,7 @@ namespace CountingReceiptTapes
         {
             List<Receipt> receipts = new List<Receipt>(); //Receipt Tape
           //  Random rndReceipts = new Random();
-            int countReceipts = 10;
+            int countReceipts = 10;  //100;
             ManualRound round = new ManualRound();
             for (int i = 0; i < countReceipts; i++)
             {
@@ -49,21 +49,38 @@ namespace CountingReceiptTapes
             }
             //----------------------
             double itogo = 0;
+            Dictionary<DateTime, double> result = new Dictionary<DateTime, double>();
+
             Console.WriteLine("№ Date       Sum");
             foreach (var rec in receipts)
             {
                 Console.WriteLine($"{rec.Num} {rec.Dat.ToString("d")}  {rec.Sum} \n");
                 
                 itogo += round.SampleRound(rec.Sum, 0);
+
+                if (!result.ContainsKey(rec.Dat))
+                {
+                    result.Add(rec.Dat, rec.Sum);
+                }
+                else
+                {
+                    result[rec.Dat] = result[rec.Dat] + rec.Sum;
+                }
             }
             itogo = round.SampleRound(itogo, 0);
+            
+            foreach (var r in result)
+            {
+                Console.WriteLine($"{r.Key.ToString("d")} - {r.Value}");
+            }
             Console.WriteLine($"Itogo: {itogo} \n");
             //----------------------
 
             FileActions fileActions = new FileActions();
             fileActions.ReceiptsWriteFile(receipts);
             List<Receipt> readReceipts = fileActions.ReceiptsReadFile("Receipts.txt");
-
+            
+            Console.WriteLine("Receipts from file:");
             itogo = 0;
             foreach (var rec in readReceipts)
             {
@@ -73,6 +90,9 @@ namespace CountingReceiptTapes
             }
             itogo = round.SampleRound(itogo, 0);
             Console.WriteLine($"Itogo: {itogo} \n");
+            // ---------------
+    
+
 
         }
     }
