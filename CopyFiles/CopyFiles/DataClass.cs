@@ -9,5 +9,6 @@ namespace CopyFiles
     static class DataClass
     {
         public static string Text;
+        public static bool flagEndCopy = false;
     }
 }

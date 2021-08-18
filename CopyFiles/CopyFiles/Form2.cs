@@ -13,11 +13,15 @@ namespace CopyFiles
 {
     public partial class Form2 : Form
     {
-        //public string str = "_1";
+     
         public Form2()
         {
             InitializeComponent();
 
+            label1.Text = DataClass.Text;
+        }
+        public void Refresh()
+        {
             label1.Text = DataClass.Text;
         }
     }

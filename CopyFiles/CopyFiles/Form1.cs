@@ -14,12 +14,16 @@ namespace CopyFiles
     public partial class Form1 : Form
     {
         public string copyFiles;
+        public Form2 formCopy;
+        public List<CopyFile> cpf = new List<CopyFile>();
+        public int i;
         public Form1()
         {
             InitializeComponent();
-
-             CreateListBoxes();
-            
+            i = 0;
+            CreateListBoxes();
+            formCopy = new Form2();
+            formCopy.Owner = this;
         }
 
         private void listBox2_SelectedIndexChanged(object sender, EventArgs e)
@@ -42,16 +46,27 @@ namespace CopyFiles
                     string fileName = file.Name;
                     copyFiles += path + fileName + " -> " + pathTo + fileName + "\n";
                     DataClass.Text = copyFiles;
-                  
-                    Form2 formCopy = new Form2();
-                    formCopy.Owner = this;
-                    formCopy.Show();
 
-                    file.CopyTo(pathTo + fileName, true);
+                    if(!formCopy.Created)
+                    {
+                        formCopy = new Form2();
+                    }
 
-                  //  formCopy.Close();
+                    if (!formCopy.Visible)
+                    {
+                        formCopy.Show();
+                    }
+                    else
+                    {
+                        formCopy.Refresh();
+                    }
+
+                    cpf.Add(new CopyFile());
+                    cpf[i].ProcessCopy(file, pathTo, fileName);
+                    i++;
+
+                   // formCopy.Close(); //
                 }
-
                 
                 CreateListBoxes();
             }
@@ -73,21 +88,15 @@ namespace CopyFiles
             DirectoryInfo dirInfo1 = new DirectoryInfo(path1);
             foreach (FileInfo file1 in dirInfo1.GetFiles("*.*"))
             {
-                //File.Copy(file.FullName, path1 + "\\" + file.Name, true);
-                lbCopyFrom.Items.Add(file1);
+                 lbCopyFrom.Items.Add(file1);
             }
 
             DirectoryInfo dirInfo2 = new DirectoryInfo(path2);
             foreach (FileInfo file2 in dirInfo2.GetFiles("*.*"))
             {
-                //File.Copy(file.FullName, path1 + "\\" + file.Name, true);
                 lbCopyTo.Items.Add(file2);
             }
 
-            // string[] files1 = Directory.GetFiles("d:\\Dir1\\"); 
-            // lbCopyFrom.Items.AddRange(files1);
-            // string[] files2 = Directory.GetFiles("d:\\Dir2\\");
-            // lbCopyFrom.Items.AddRange(files2);
-        }
+          }
     }
 }
